@@ -2,8 +2,8 @@
 " Vim Basics
 " ==========
 set nocompatible
-set encoding=utf-8
 set t_Co=256
+set modelines=0
 
 " Enable vim-plug
 " ===============
@@ -22,19 +22,21 @@ call plug#begin()
 "Plug 'rking/ag.vim', {'on': 'Ag'}
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'edkolev/tmuxline.vim'
+" Plug 'ctrlpvim/ctrlp.vim'
 Plug 'bling/vim-airline'
-Plug 'benekastah/neomake'
-"Plug 'scrooloose/nerdtree'
+Plug 'edkolev/tmuxline.vim'
+" Plug 'benekastah/neomake'
+Plug 'scrooloose/nerdtree'
 Plug 'christoomey/vim-tmux-navigator'
 "Plug 'moll/vim-bbye'
 "Plug 'SirVer/ultisnips'
+Plug 'mileszs/ack.vim'
 "
 "" Plain Text
 "Plug 'reedes/vim-pencil', {'for': ['text']}
 "Plug 'junegunn/goyo.vim', {'for': ['text']}
 "Plug 'amix/vim-zenroom2', {'for': ['text']}
+Plug 'vim-scripts/loremipsum'
 "
 "" Syntaxes
 "Plug 'othree/html5.vim', {'for': ['html']}
@@ -46,8 +48,7 @@ Plug 'christoomey/vim-tmux-navigator'
 "Plug 'mxw/vim-jsx', {'for': ['javascript']}
 "Plug 'cakebaker/scss-syntax.vim', {'for': ['scss', 'sass', 'haml']}
 "Plug 'digitaltoad/vim-jade'
-Plug 'godlygeek/tabular'
-Plug 'plasticboy/vim-markdown'
+" Plug 'godlygeek/tabular'
 "
 " Ruby
 Plug 'vim-ruby/vim-ruby', {'for': 'ruby'}
@@ -63,7 +64,16 @@ Plug 'sheerun/vim-polyglot'
 Plug 'sjl/gundo.vim'
 
 Plug 'tmux-plugins/vim-tmux-focus-events'
-Plug 'blueyed/vim-diminactive'
+" Plug 'blueyed/vim-diminactive'
+" Plug 'wincent/command-t'
+"
+" Use this version of vim-autoclose as the main one
+" (https://github.com/Townk/vim-autoclose) breaks abbreviations.
+Plug 'jmjohnson/vim-autoclose'
+
+" I find I have to put this at the end or else my syntax highlighting for TODO
+" gets overwritten.
+Plug 'spatten/vim-markdown', {'for': 'markdown'} " Plug '~/code/vim/vim-markdown', {'for': 'markdown'}
 
 " End vim-plug
 " ============
@@ -90,6 +100,7 @@ endif
 " General Config
 " ==============
 let mapleader=' '
+let maplocalleader='\\'
 set number                      " Line numbers are good
 "set relativenumber
 "set backspace=indent,eol,start  " Allow backspace in insert mode
@@ -104,16 +115,18 @@ set splitbelow                  " Opens horizontal split below current window
 "set re=1                        " Uses the first regex version, major speedup
 "let g:jsx_ext_required = 0      " Allow JSX in normal JS file
 let g:diminactive_enable_focus = 1
-let g:diminactive_use_syntax = 1
+" let g:diminactive_use_syntax = 1
 "
 "
-"" Trim trailing whitespace on save
-" autocmd BufWritePre * :%s/\s\+$//e
+" Trim trailing whitespace on save
+autocmd BufWritePre * :%s/\s\+$//e
 " Show trailing whitepace and spaces before a tab:
 :highlight ExtraWhitespace ctermbg=red guibg=red
 :autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
 
-"
+" Turn on spelling for markdown and txt files
+" autocmd BufNewFile,BufRead *.md,*.txt :setlocal spell spelllang=en_us
+
 "" Mouse
 "" ======
 "set mouse=a " Enable mouse use in all modes
@@ -123,6 +136,7 @@ let g:diminactive_use_syntax = 1
 set ignorecase
 set smartcase
 set incsearch        " Find the next match as we type the search
+set showmatch
 set hlsearch         " Hilight searches by default
 set viminfo='100,f1  " Save up to 100 marks, enable capital marks
 
@@ -135,6 +149,7 @@ set smartindent
 set smarttab
 set shiftwidth=2
 set softtabstop=2
+set shiftround "round indent level to 2
 set tabstop=2
 set expandtab
 set list listchars=tab:\ \ ,trail:·   " Display tabs and trailing spaces visually
@@ -143,16 +158,17 @@ set wrap                            " wrap lines
 set linebreak                         " Wrap lines at convenient points
 set ttyfast
 set lazyredraw
+set ruler
 
 " Turn Off Swap Files
-"" ===================
-"set noswapfile
-"set nobackup
-"set nowritebackup
-"set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
-"set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
-"
-"" UltiSnips
+" ===================
+set noswapfile
+set nobackup
+set nowritebackup
+set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+
+" UltiSnips
 "" =========
 "let g:UltiSnipsExpandTrigger="<C-v>"
 "let g:UltiSnipsJumpForwardTrigger="<c-b>"
@@ -179,9 +195,9 @@ set wildignore+=bower_components,node_modules,vendor/bundle,public
 " Scrolling
 " =========
 " Start scrolling when we're getting close to margins
-set scrolloff=10
-set sidescrolloff=15
-set sidescroll=1
+set scrolloff=3
+" set sidescrolloff=15
+" set sidescroll=1
 
 " Disable Arrow Keys
 " ==================
@@ -259,13 +275,13 @@ map <Leader>a ggVG
 "let base16colorspace=256
 "silent! colorscheme Tomorrow-Night
 "set background=dark
-"
-"" silent! colorscheme Tomorrow
-"" set background=light
-"
+
+" silent! colorscheme Tomorrow
+set background=light
+
 " Airline
 " =======
-let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = 0
 " let g:airline_theme = 'bubblegum'
 " let g:airline_theme = 'tomorrow'
 " let g:airline_theme = 'eighties'
@@ -273,8 +289,12 @@ let g:airline_theme = 'solarized'
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
-let g:airline_symbols.space = "\ua0"
+" let g:airline_symbols.space = "\ua0"
 let g:airline#enable#branch = 1
+"
+" Tmuxline
+" ========
+let g:tmuxline_powerline_separators = 0
 
 " Git Gutter
 " ==========
@@ -302,6 +322,10 @@ endif
 " <Ctrl-l> redraws the screen and removes any search highlighting.
 nnoremap <silent> <C-l> :nohl<CR><C-l>
 
+" Edit and source the init.vim file
+nnoremap <Leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <Leader>sv :so $MYVIMRC<cr>
+
 " bind \ (backward slash) to grep shortcut
 nnoremap \ :Ag<SPACE>
 
@@ -317,6 +341,9 @@ inoremap <A-k> <Esc>:m .-2<CR>==gi
 vnoremap <A-j> :m '>+1<CR>gv=gv
 vnoremap <A-k> :m '<-2<CR>gv=gv
 
+" Folding
+" toggle fold on next line
+nnoremap zs jzak
 
 " Rust
 "" ====
@@ -352,3 +379,52 @@ vnoremap <A-k> :m '<-2<CR>gv=gv
 "nnoremap <leader>d :vsp %:h/
 "nnoremap <leader>` :NERDTreeFind<CR>
 "
+" Use ; instead of : to start commands
+nnoremap ; :
+
+" Nicer fold text
+" from http://vim.wikia.com/wiki/Customize_text_for_closed_folds
+
+" set foldtext=MyFoldText()
+" function! MyFoldText()
+"   let line = getline(v:foldstart)
+"   if match( line, '^[ \t]*\(\/\*\|\/\/\)[*/\\]*[ \t]*$' ) == 0
+"     let initial = substitute( line, '^\([ \t]\)*\(\/\*\|\/\/\)\(.*\)', '\1\2', '' )
+"     let linenum = v:foldstart + 1
+"     while linenum < v:foldend
+"       let line = getline( linenum )
+"       let comment_content = substitute( line, '^\([ \t\/\*]*\)\(.*\)$', '\2', 'g' )
+"       if comment_content != ''
+"         break
+"       endif
+"       let linenum = linenum + 1
+"     endwhile
+"     let sub = initial . ' ' . comment_content
+"   else
+"     let sub = line
+"     let startbrace = substitute( line, '^.*{[ \t]*$', '{', 'g')
+"     if startbrace == '{'
+"       let line = getline(v:foldend)
+"       let endbrace = substitute( line, '^[ \t]*}\(.*\)$', '}', 'g')
+"       if endbrace == '}'
+"         let sub = sub.substitute( line, '^[ \t]*}\(.*\)$', '...}\1', 'g')
+"       endif
+"     endif
+"   endif
+"   let n = v:foldend - v:foldstart + 1
+"   let info = " " . n . " lines"
+"   let sub = sub . "                                                                                                                  "
+"   let num_w = getwinvar( 0, '&number' ) * getwinvar( 0, '&numberwidth' )
+"   let fold_w = getwinvar( 0, '&foldcolumn' )
+"   let sub = strpart( sub, 0, winwidth(0) - strlen( info ) - num_w - fold_w - 1 )
+"   return sub . info
+" endfunction
+
+highlight FoldColumn  gui=bold    guifg=grey65     guibg=Grey90
+highlight Folded      gui=italic  guifg=Black      guibg=Grey90
+highlight LineNr      gui=NONE    guifg=grey60     guibg=Grey90
+
+" Abbreviations and typos
+iab teh the
+iab waht what
+iab adn and
