@@ -13,8 +13,8 @@ call plug#begin()
 " =======
 
 " VCS
-"Plug 'tpope/vim-fugitive'
-"Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
+" Plug 'airblade/vim-gitgutter'
 "Plug 'bruno-/vim-husk'
 "
 "" System
@@ -22,15 +22,19 @@ call plug#begin()
 "Plug 'rking/ag.vim', {'on': 'Ag'}
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-abolish'
 " Plug 'ctrlpvim/ctrlp.vim'
 Plug 'bling/vim-airline'
 Plug 'edkolev/tmuxline.vim'
-" Plug 'benekastah/neomake'
+Plug 'benekastah/neomake'
 Plug 'scrooloose/nerdtree'
 Plug 'christoomey/vim-tmux-navigator'
 "Plug 'moll/vim-bbye'
 "Plug 'SirVer/ultisnips'
 Plug 'mileszs/ack.vim'
+Plug 'dhruvasagar/vim-table-mode'
+Plug 'tyru/open-browser.vim'
+Plug 'tyru/open-browser-github.vim'
 "
 "" Plain Text
 "Plug 'reedes/vim-pencil', {'for': ['text']}
@@ -39,20 +43,22 @@ Plug 'mileszs/ack.vim'
 Plug 'vim-scripts/loremipsum'
 "
 "" Syntaxes
-"Plug 'othree/html5.vim', {'for': ['html']}
-"Plug 'vim-scripts/HTML-AutoCloseTag', {'for': ['html']}
-"Plug 'kchmck/vim-coffee-script', {'for': ['coffee']}
-"Plug 'toadums/vim-cjsx', {'for': ['coffee']}
-"Plug 'mxw/vim-jsx'
-"Plug 'pangloss/vim-javascript', {'for': ['javascript', 'haml']}
-"Plug 'mxw/vim-jsx', {'for': ['javascript']}
-"Plug 'cakebaker/scss-syntax.vim', {'for': ['scss', 'sass', 'haml']}
+Plug 'othree/html5.vim', {'for': ['html']}
+Plug 'vim-scripts/HTML-AutoCloseTag', {'for': ['html']}
+Plug 'kchmck/vim-coffee-script', {'for': ['coffee']}
+Plug 'toadums/vim-cjsx', {'for': ['coffee']}
+Plug 'mxw/vim-jsx'
+Plug 'pangloss/vim-javascript', {'for': ['javascript', 'haml']}
+Plug 'mxw/vim-jsx', {'for': ['javascript']}
+Plug 'cakebaker/scss-syntax.vim', {'for': ['scss', 'sass', 'haml']}
 "Plug 'digitaltoad/vim-jade'
 " Plug 'godlygeek/tabular'
 "
 " Ruby
 Plug 'vim-ruby/vim-ruby', {'for': 'ruby'}
 Plug 'tpope/vim-rails', {'for': 'ruby'}
+Plug 'tpope/vim-rake', {'for': 'ruby'}
+Plug 'tpope/vim-projectionist'
 Plug 'tpope/vim-endwise', {'for': 'ruby'}
 
 " Themes
@@ -73,7 +79,12 @@ Plug 'jmjohnson/vim-autoclose'
 
 " I find I have to put this at the end or else my syntax highlighting for TODO
 " gets overwritten.
-Plug 'spatten/vim-markdown', {'for': 'markdown'} " Plug '~/code/vim/vim-markdown', {'for': 'markdown'}
+" Plug 'spatten/vim-markdown', {'for': 'markdown'}
+Plug '~/code/vim/vim-markdown', {'for': 'markdown'}
+
+" ctag support
+" Plug 'xolox/vim-misc'
+" Plug 'xolox/vim-easytags'
 
 " End vim-plug
 " ============
@@ -126,6 +137,11 @@ autocmd BufWritePre * :%s/\s\+$//e
 
 " Turn on spelling for markdown and txt files
 " autocmd BufNewFile,BufRead *.md,*.txt :setlocal spell spelllang=en_us
+
+" EasyTags setup (https://peterodding.com/code/vim/easytags/)
+" let g:easytags_async = 1
+" let g:easytags_always_enabled = 0
+" let g:easytags_autorecurse = 0
 
 "" Mouse
 "" ======
@@ -223,6 +239,10 @@ noremap H ^
 nnoremap L $
 vnoremap L $h
 
+" Surround in triple-tildes in Markdown
+" V(make selection)S`
+autocmd FileType markdown let b:surround_96 = "~~~\r~~~"
+
 " Selection
 " ==========
 "
@@ -253,21 +273,21 @@ map <Leader>a ggVG
 "cmap w!! %!sudo tee > /dev/null %
 "
 "" Add some other bindings from files to languages
-"autocmd! BufRead,BufNewFile *.jbuilder,Gemfile,Rakefile,Procfile,Guardfile setf ruby
-"au BufRead,BufNewFile *.thor set filetype=ruby
+autocmd! BufRead,BufNewFile *.jbuilder,Gemfile,Rakefile,Procfile,Guardfile setf ruby
+au BufRead,BufNewFile *.thor set filetype=ruby
 "au BufRead,BufNewFile Guardfile set filetype=ruby
 "au BufRead,BufNewFile */nginx/*.conf set filetype=nginx
 "au BufRead,BufNewFile *.jbuilder setf ruby
 "au BufRead,BufNewFile *.jeco setf html
 "au BufRead,BufNewFile *.jss set filetype=css
 "au BufRead,BufNewFile *.hbs set filetype=mustache
-"au BufRead,BufNewFile *.md set filetype=markdown
-"autocmd! BufWritePost,BufEnter * Neomake
+au BufRead,BufNewFile *.md set filetype=markdown
+autocmd! BufWritePost,BufEnter * Neomake
 "
 "" linters
-"let g:neomake_ruby_enabled_makers = ['rubocop']
-"let g:neomake_coffeescript_enabled_makers = ['coffeelint']
-"let g:neomake_javascript_enabled_makers = ['eslint']
+let g:neomake_ruby_enabled_makers = ['rubocop']
+let g:neomake_coffeescript_enabled_makers = ['coffeelint']
+let g:neomake_javascript_enabled_makers = ['eslint']
 "
 "" Colorscheme
 "" ===========
@@ -321,13 +341,18 @@ endif
 
 " <Ctrl-l> redraws the screen and removes any search highlighting.
 nnoremap <silent> <C-l> :nohl<CR><C-l>
+" turn off current search highlighting with '\'
+nnoremap \ :noh<CR>
 
 " Edit and source the init.vim file
-nnoremap <Leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <Leader>ev :edit $MYVIMRC<cr>
 nnoremap <Leader>sv :so $MYVIMRC<cr>
 
+" Go to Leanpub
+nnoremap <Leader>el :edit ~lpub/Gemfile<cr>
+
 " bind \ (backward slash) to grep shortcut
-nnoremap \ :Ag<SPACE>
+" nnoremap \ :Ag<SPACE>
 
 " default to the current file's directory when opening a new file
 set autochdir
@@ -344,6 +369,11 @@ vnoremap <A-k> :m '<-2<CR>gv=gv
 " Folding
 " toggle fold on next line
 nnoremap zs jzak
+
+" Open my current work-log
+nnoremap <Leader>ew :execute "edit " . split(globpath('~/Dropbox/work-logs', '20*.md'), '\n')[-1]<CR>
+" Open or Create a new work-log with today's date
+:nnoremap <Leader>nw :execute "vsplit" . strftime("~/Dropbox/work-logs/%Y-%m-%d.md")<CR>
 
 " Rust
 "" ====
@@ -423,6 +453,10 @@ nnoremap ; :
 highlight FoldColumn  gui=bold    guifg=grey65     guibg=Grey90
 highlight Folded      gui=italic  guifg=Black      guibg=Grey90
 highlight LineNr      gui=NONE    guifg=grey60     guibg=Grey90
+
+" Override Nerdtree mappings for ctrl-J and ctrl-K
+let g:NERDTreeMapJumpPrevSibling = '<F1>'
+let g:NERDTreeMapJumpNextSibling = '<F2>'
 
 " Abbreviations and typos
 iab teh the
