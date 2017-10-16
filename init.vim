@@ -26,7 +26,7 @@ Plug 'tpope/vim-abolish'
 " Plug 'ctrlpvim/ctrlp.vim'
 Plug 'bling/vim-airline'
 Plug 'edkolev/tmuxline.vim'
-Plug 'benekastah/neomake'
+Plug 'neomake/neomake'
 Plug 'scrooloose/nerdtree'
 Plug 'christoomey/vim-tmux-navigator'
 "Plug 'moll/vim-bbye'
@@ -38,7 +38,7 @@ Plug 'tyru/open-browser-github.vim'
 "
 "" Plain Text
 "Plug 'reedes/vim-pencil', {'for': ['text']}
-"Plug 'junegunn/goyo.vim', {'for': ['text']}
+Plug 'junegunn/goyo.vim', {'for': ['text', 'markdown']}
 "Plug 'amix/vim-zenroom2', {'for': ['text']}
 Plug 'vim-scripts/loremipsum'
 "
@@ -226,13 +226,16 @@ map  <left>  <nop>
 map  <right> <nop>
 map  <up>    <nop>
 
-set noesckeys
+" set noesckeys
 set ttimeout
 set ttimeoutlen=1
+
 " hit jk quickly instead of <Escape>
 imap jk <Esc>
 cmap jk <Esc>
 vmap jk <Esc>
+" how long you have to type that second key, in ms
+set timeoutlen=300
 
 " Easier start & end of line.
 noremap H ^
@@ -350,6 +353,7 @@ nnoremap <Leader>sv :so $MYVIMRC<cr>
 
 " Go to Leanpub
 nnoremap <Leader>el :edit ~lpub/Gemfile<cr>
+nnoremap <Leader>ep :edit ~pubcoin/Gemfile<cr>
 
 " bind \ (backward slash) to grep shortcut
 " nnoremap \ :Ag<SPACE>
@@ -365,6 +369,11 @@ inoremap <A-j> <Esc>:m .+1<CR>==gi
 inoremap <A-k> <Esc>:m .-2<CR>==gi
 vnoremap <A-j> :m '>+1<CR>gv=gv
 vnoremap <A-k> :m '<-2<CR>gv=gv
+
+" put blank lines above and below current line
+nnoremap <A-o> o<Esc>kO<Esc>j
+
+
 
 " Folding
 " toggle fold on next line
