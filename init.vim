@@ -14,6 +14,7 @@ call plug#begin()
 
 " VCS
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
 " Plug 'airblade/vim-gitgutter'
 "Plug 'bruno-/vim-husk'
 "
