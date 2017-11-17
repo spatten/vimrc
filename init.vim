@@ -25,7 +25,8 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-abolish'
 " Plug 'ctrlpvim/ctrlp.vim'
-Plug 'bling/vim-airline'
+" Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline-themes'
 Plug 'edkolev/tmuxline.vim'
 Plug 'neomake/neomake'
 Plug 'scrooloose/nerdtree'
@@ -64,6 +65,7 @@ Plug 'tpope/vim-endwise', {'for': 'ruby'}
 
 " Themes
 Plug 'flazz/vim-colorschemes'
+Plug 'clinstid/eink.vim'
 
 Plug 'ervandew/supertab'
 Plug 'godlygeek/tabular'
@@ -242,10 +244,13 @@ set timeoutlen=300
 noremap H ^
 nnoremap L $
 vnoremap L $h
+"
+"This unsets the "last search pattern" register by hitting return
+nnoremap <CR> :noh<CR><CR>
 
 " Surround in triple-tildes in Markdown
 " V(make selection)S`
-autocmd FileType markdown let b:surround_96 = "~~~\r~~~"
+autocmd FileType markdown let b:surround_126 = "~~~\r~~~"
 
 " Selection
 " ==========
@@ -299,22 +304,23 @@ let g:neomake_javascript_enabled_makers = ['eslint']
 "let base16colorspace=256
 "silent! colorscheme Tomorrow-Night
 "set background=dark
+colorscheme solarized
 
 " silent! colorscheme Tomorrow
 set background=light
 
 " Airline
 " =======
-let g:airline_powerline_fonts = 0
+" let g:airline_powerline_fonts = 0
 " let g:airline_theme = 'bubblegum'
 " let g:airline_theme = 'tomorrow'
 " let g:airline_theme = 'eighties'
-let g:airline_theme = 'solarized'
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
+" let g:airline_theme = 'solarized'
+" if !exists('g:airline_symbols')
+"   let g:airline_symbols = {}
+" endif
 " let g:airline_symbols.space = "\ua0"
-let g:airline#enable#branch = 1
+" let g:airline#enable#branch = 1
 "
 " Tmuxline
 " ========
