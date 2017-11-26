@@ -334,8 +334,8 @@ let g:gitgutter_eager = 0
 
 " Don't show any border for vertical splits
 highlight VertSplit cterm=NONE
-"set fillchars+=vert:\ " This comment is here to make the space stay
-"hi VertSplit ctermbg=NONE guibg=NONE
+set fillchars+=vert:\ " This comment is here to make the space stay
+hi VertSplit ctermbg=NONE guibg=NONE
 "
 " Searching
 " ==========
