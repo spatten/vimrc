@@ -46,7 +46,7 @@ Plug 'vim-scripts/loremipsum'
 "
 "" Syntaxes
 Plug 'othree/html5.vim', {'for': ['html']}
-Plug 'vim-scripts/HTML-AutoCloseTag', {'for': ['html']}
+Plug 'vim-scripts/HTML-AutoCloseTag', {'for': ['html', 'eruby']}
 Plug 'kchmck/vim-coffee-script', {'for': ['coffee']}
 Plug 'toadums/vim-cjsx', {'for': ['coffee']}
 Plug 'mxw/vim-jsx'
@@ -292,6 +292,7 @@ au BufRead,BufNewFile *.thor set filetype=ruby
 "au BufRead,BufNewFile *.hbs set filetype=mustache
 au BufRead,BufNewFile *.md set filetype=markdown
 autocmd! BufWritePost,BufEnter * Neomake
+autocmd BufNewFile,BufRead *.html.erb set filetype=html.eruby
 "
 "" linters
 let g:neomake_ruby_enabled_makers = ['rubocop']
